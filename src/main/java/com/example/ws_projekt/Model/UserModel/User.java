@@ -1,10 +1,11 @@
 package com.example.ws_projekt.Model.UserModel;
 
 
+import com.example.ws_projekt.Model.CityCoordinate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "userData")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,13 +13,16 @@ public class User {
 
     private String username;
     private String password;
-    private String cityOfOrigin;
 
-    public String getCityOfOrigin() {
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "city_id")
+    private CityCoordinate cityOfOrigin;
+
+    public CityCoordinate getCityOfOrigin() {
         return cityOfOrigin;
     }
 
-    public void setCityOfOrigin(String cityOfOrigin) {
+    public void setCityOfOrigin(CityCoordinate cityOfOrigin) {
         this.cityOfOrigin = cityOfOrigin;
     }
 
