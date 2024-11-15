@@ -3,7 +3,7 @@ package com.example.ws_projekt.Model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "city_coordinates")
+@Table(name = "cities")
 public class CityCoordinate {
 
     @Id
@@ -15,12 +15,6 @@ public class CityCoordinate {
     private double longitude;
 
     public CityCoordinate() {}
-
-    public CityCoordinate(String city, double latitude, double longitude) {
-        this.city = city;
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
 
     public Long getId() {
         return id;

@@ -4,6 +4,7 @@ package com.example.ws_projekt.Controller;
 import com.example.ws_projekt.Model.CityCoordinate;
 import com.example.ws_projekt.Model.UserModel.User;
 import com.example.ws_projekt.Model.WeatherModel;
+import com.example.ws_projekt.Repository.CityCoordinateRepository;
 import com.example.ws_projekt.Repository.UserRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,44 +24,47 @@ public class WeatherController {
     private final WebClient weatherWebClientConfig;
     private final UserRepository userRepository;
 
-    public WeatherController(WebClient.Builder webClient, UserRepository userRepository) {
+    private final CityCoordinateRepository cityCoordinateRepository;
+
+    public WeatherController(WebClient.Builder webClient, UserRepository userRepository, CityCoordinateRepository cityCoordinateRepository) {
         this.weatherWebClientConfig = webClient
                 .baseUrl("https://api.open-meteo.com/v1/forecast")
                 .build();
         this.userRepository = userRepository;
+        this.cityCoordinateRepository = cityCoordinateRepository;
     }
 
-    private static final List<CityCoordinate> cities = List.of(
-            new CityCoordinate("Stockholm", 59.33, 18.06),
-            new CityCoordinate("Seoul", 37.53, 127.02),
-            new CityCoordinate("New-York", 40.73, -73.935),
-            new CityCoordinate("Tokyo", 35.65, 139.839)
-    );
 
     @GetMapping("/{city}")
     public Mono<WeatherModel> getWeatherAtCity(@PathVariable String city) {
 
 
-        for (CityCoordinate coordinate : cities) {
-            if (coordinate.getCity().equalsIgnoreCase(city)) {
+        Optional<CityCoordinate> cityName = cityCoordinateRepository.findByCity(city);
+
+        if (cityName.isEmpty()){
+            return Mono.error(new RuntimeException("City not found"));
+        }
+
+        CityCoordinate foundCity = cityName.get();
+
                 return weatherWebClientConfig.get()
                         .uri(uriBuilder -> uriBuilder
-                                .queryParam("latitude", coordinate.getLatitude())
-                                .queryParam("longitude", coordinate.getLongitude())
+                                .queryParam("latitude", foundCity.getLatitude())
+                                .queryParam("longitude", foundCity.getLongitude())
                                 .queryParam("hourly", "temperature_2m")
                                 .build())
                         .retrieve()
                         .bodyToMono(WeatherModel.class);
 
-            }
+
+
+
+        //return Mono.error(new RuntimeException("City not found"));
+
         }
 
-        return Mono.error(new RuntimeException("City not found"));
 
-        }
-
-
-    @GetMapping("/{id}/weather/weekly")
+    @GetMapping("/{id}/weekly")
     public Mono<WeatherModel> getWeatherWeekly(@PathVariable Long id) {
 
         Optional<User> optionalUser = userRepository.findById(id);
