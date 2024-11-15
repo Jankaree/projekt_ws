@@ -5,7 +5,7 @@ import com.example.ws_projekt.Model.CityCoordinate;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "userData")
+@Table(name = "user-Data")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

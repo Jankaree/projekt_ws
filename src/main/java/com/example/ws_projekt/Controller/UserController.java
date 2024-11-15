@@ -1,7 +1,9 @@
 package com.example.ws_projekt.Controller;
 
+import com.example.ws_projekt.Model.CityCoordinate;
 import com.example.ws_projekt.Model.UserModel.User;
 import com.example.ws_projekt.Model.WeatherModel;
+import com.example.ws_projekt.Repository.CityCoordinateRepository;
 import com.example.ws_projekt.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -22,16 +24,19 @@ public class UserController {
     private final UserRepository userRepository;
     private final WebClient webClient;
 
+    private final CityCoordinateRepository cityCoordinateRepository;
+
     @Autowired
-    public UserController(UserRepository userRepository, WebClient.Builder webClientBuilder) {
+    public UserController(UserRepository userRepository, WebClient.Builder webClientBuilder, CityCoordinateRepository cityCoordinateRepository) {
         this.userRepository = userRepository;
         this.webClient = webClientBuilder.baseUrl("https://api.open-meteo.com/v1/forecast").build();
+        this.cityCoordinateRepository = cityCoordinateRepository;
     }
 
     @PostMapping
     public ResponseEntity<String> addUser(@RequestBody User user) {
 
-        List<String> validCities = Arrays.asList("Stockholm", "Seoul", "New-York", "Tokyo");
+        Optional<CityCoordinate> city = cityCoordinateRepository.findByCity(user.getCityOfOrigin().getCity());
 
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
             return ResponseEntity.status(400).body("Username cannot be null or empty.");
@@ -39,11 +44,16 @@ public class UserController {
         if (user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.status(400).body("Password cannot be null or empty.");
         }
-        if (user.getCityOfOrigin() == null || !validCities.contains(user.getCityOfOrigin().getCity())) {
+        if (user.getCityOfOrigin() == null) {
             return ResponseEntity.status(400).body("City of origin must be specified.");
         }
 
-        // Save the new user
+        if (city.isEmpty()) {
+            return ResponseEntity.status(400).body("City of origin is not valid.");
+        }
+
+
+        user.setCityOfOrigin(city.get());
         userRepository.save(user);
         return ResponseEntity.status(201).body("User created successfully.");
     }

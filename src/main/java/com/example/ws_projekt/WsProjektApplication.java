@@ -11,3 +11,8 @@ public class WsProjektApplication {
     }
 
 }
+
+//TODO
+//citycoordiante only name
+// daily weather fix
+//historiska väderdata?
