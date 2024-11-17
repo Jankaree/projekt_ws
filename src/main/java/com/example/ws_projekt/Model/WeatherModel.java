@@ -1,5 +1,10 @@
 package com.example.ws_projekt.Model;
 
+import com.example.ws_projekt.Model.DailyModel.Daily;
+import com.example.ws_projekt.Model.DailyModel.DailyUnits;
+import com.example.ws_projekt.Model.HourlyModel.Hourly;
+import com.example.ws_projekt.Model.HourlyModel.HourlyUnits;
+
 public class WeatherModel {
     private  double latitude;
     private  double longitude;
@@ -10,6 +15,26 @@ public class WeatherModel {
     private int elevation;
     private HourlyUnits hourly_Units;
     private Hourly hourly;
+
+    private DailyUnits daily_Units;
+    private Daily daily;
+
+    public DailyUnits getDaily_Units() {
+        return daily_Units;
+    }
+
+    public void setDaily_Units(DailyUnits daily_Units) {
+        this.daily_Units = daily_Units;
+    }
+
+    public Daily getDaily() {
+        return daily;
+    }
+
+    public void setDaily(Daily daily) {
+        this.daily = daily;
+    }
+
     public double getLatitude() {
         return latitude;
     }

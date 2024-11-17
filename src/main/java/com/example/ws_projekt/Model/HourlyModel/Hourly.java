@@ -1,4 +1,4 @@
-package com.example.ws_projekt.Model;
+package com.example.ws_projekt.Model.HourlyModel;
 
 import java.util.List;
 public class Hourly {

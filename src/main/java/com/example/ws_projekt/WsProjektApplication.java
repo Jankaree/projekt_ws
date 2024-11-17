@@ -1,3 +1,6 @@
+
+
+
 package com.example.ws_projekt;
 
 import org.springframework.boot.SpringApplication;
@@ -13,6 +16,6 @@ public class WsProjektApplication {
 }
 
 //TODO
-//citycoordiante only name
+
 // daily weather fix
 //historiska väderdata?

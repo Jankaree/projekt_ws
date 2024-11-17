@@ -90,6 +90,30 @@ public class WeatherController {
                 .bodyToMono(WeatherModel.class);
     }
 
+    @GetMapping("/{id}/daily/{date}")
+    public Mono<WeatherModel> getDailyweatherForDate(@PathVariable Long id, @PathVariable String date){
+        LocalDate localDate = LocalDate.parse(date);
+
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            return Mono.error(new RuntimeException("User not found"));
+        }
+
+        User user = optionalUser.get();
+
+        return weatherWebClientConfig.get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("latitude", user.getCityOfOrigin().getLatitude())
+                        .queryParam("longitude", user.getCityOfOrigin().getLongitude())
+                        .queryParam("daily", "temperature_2m_max,temperature_2m_min")
+                        .queryParam("start_date", date)
+                        .queryParam("end_date", date)
+                        .build())
+                .retrieve()
+                .bodyToMono(WeatherModel.class);
+    }
+
 
 
     }
