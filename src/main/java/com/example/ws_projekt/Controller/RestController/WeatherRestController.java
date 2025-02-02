@@ -1,4 +1,4 @@
-package com.example.ws_projekt.Controller;
+package com.example.ws_projekt.Controller.RestController;
 
 
 import com.example.ws_projekt.Model.CityCoordinate;
@@ -14,19 +14,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/weather")
-public class WeatherController {
+@RequestMapping("/api/weather")
+public class WeatherRestController {
 
     private final WebClient weatherWebClientConfig;
     private final UserRepository userRepository;
 
     private final CityCoordinateRepository cityCoordinateRepository;
 
-    public WeatherController(WebClient.Builder webClient, UserRepository userRepository, CityCoordinateRepository cityCoordinateRepository) {
+    public WeatherRestController(WebClient.Builder webClient, UserRepository userRepository, CityCoordinateRepository cityCoordinateRepository) {
         this.weatherWebClientConfig = webClient
                 .baseUrl("https://api.open-meteo.com/v1/forecast")
                 .build();

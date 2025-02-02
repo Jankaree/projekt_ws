@@ -1,4 +1,4 @@
-package com.example.ws_projekt.Controller;
+package com.example.ws_projekt.Controller.RestController;
 
 import com.example.ws_projekt.Model.CityCoordinate;
 import com.example.ws_projekt.Model.UserModel.User;
@@ -10,16 +10,16 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/api/user")
+public class UserRestController {
 
     private final UserRepository userRepository;
     private final WebClient webClient;
@@ -27,7 +27,7 @@ public class UserController {
     private final CityCoordinateRepository cityCoordinateRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository, WebClient.Builder webClientBuilder, CityCoordinateRepository cityCoordinateRepository) {
+    public UserRestController(UserRepository userRepository, WebClient.Builder webClientBuilder, CityCoordinateRepository cityCoordinateRepository) {
         this.userRepository = userRepository;
         this.webClient = webClientBuilder.baseUrl("https://api.open-meteo.com/v1/forecast").build();
         this.cityCoordinateRepository = cityCoordinateRepository;
