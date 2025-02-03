@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User</title>
+</head>
+<body>
+<h1>Create New User</h1>
+
+<form action="/user/add" method="post" th:object="${user}">
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" th:field="*{username}" />
+
+    <br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}" />
+
+    <br/>
+
+
+    <label for="city">City of Origin:</label>
+    <select id="city" th:field="*{cityOfOrigin}">
+        <option value="">-- Select City --</option>
+        <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.city}"></option>
+    </select>
+
+    <br/>
+
+    <button type="submit">Create User</button>
+</form>
+
+
+
+</body>
+</html>
