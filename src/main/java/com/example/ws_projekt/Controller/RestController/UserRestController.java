@@ -8,6 +8,7 @@ import com.example.ws_projekt.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,12 +26,14 @@ public class UserRestController {
     private final WebClient webClient;
 
     private final CityCoordinateRepository cityCoordinateRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserRestController(UserRepository userRepository, WebClient.Builder webClientBuilder, CityCoordinateRepository cityCoordinateRepository) {
+    public UserRestController(UserRepository userRepository, WebClient.Builder webClientBuilder, CityCoordinateRepository cityCoordinateRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.webClient = webClientBuilder.baseUrl("https://api.open-meteo.com/v1/forecast").build();
         this.cityCoordinateRepository = cityCoordinateRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
@@ -52,7 +55,8 @@ public class UserRestController {
             return ResponseEntity.status(400).body("City of origin is not valid.");
         }
 
-
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         user.setCityOfOrigin(city.get());
         userRepository.save(user);
         return ResponseEntity.status(201).body("User created successfully.");
