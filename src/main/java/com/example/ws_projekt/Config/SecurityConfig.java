@@ -25,8 +25,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/user/create","/api/user","/user/add").permitAll()
+                        .requestMatchers( "/user/create","/api/**","/user/add").permitAll()
                         .anyRequest().authenticated()
+                ).formLogin(form -> form
+                        .defaultSuccessUrl("/user/userPage",true)
+                        .failureUrl("/loginPage?error=true")
+                        .permitAll()
                 )
 
                 .logout(logout ->
