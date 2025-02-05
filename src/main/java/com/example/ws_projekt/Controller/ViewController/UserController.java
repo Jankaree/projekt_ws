@@ -5,6 +5,8 @@ import com.example.ws_projekt.Model.WeatherModel;
 import com.example.ws_projekt.Repository.CityCoordinateRepository;
 import com.example.ws_projekt.Repository.UserRepository;
 import com.example.ws_projekt.Service.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.time.LocalTime;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -61,7 +65,6 @@ public class UserController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
         String username = authentication.getName();
         Optional<User> optionalUser = userRepository.findByUsername(username);
         boolean loggedInUser = userService.isLoggedIn();
@@ -69,6 +72,25 @@ public class UserController {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             model.addAttribute("user", optionalUser.get());
+
+            Map<String, Object> weatherData = restTemplate.getForObject("http://localhost:8080/api/weather/" + user.getId() + "/weekly", Map.class);
+            Map<String, Object> hourlyDataMap = (Map<String, Object>) weatherData.get("hourly");
+
+            List<String> times = (List<String>) hourlyDataMap.get("time");
+            List<Double> temperatures = (List<Double>) hourlyDataMap.get("temperature_2m");
+
+            List<Map<String, Object>> weatherAt14 = new ArrayList<>();
+
+            for (int i = 0; i < times.size(); i++) {
+                if (times.get(i).endsWith("14:00")) {
+                    Map<String, Object> weatherAt14Data = new HashMap<>();
+                    weatherAt14Data.put("time", times.get(i));
+                    weatherAt14Data.put("temperature", temperatures.get(i));
+                    weatherAt14.add(weatherAt14Data);
+                }
+            }
+
+            model.addAttribute("weatherAt14", weatherAt14);
 
         }
 
@@ -78,6 +100,11 @@ public class UserController {
     }
 
 
-
-
 }
+
+
+
+
+
+
+
