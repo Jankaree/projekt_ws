@@ -18,6 +18,14 @@ public class User {
     @JoinColumn(name = "city_id")
     private CityCoordinate cityOfOrigin;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public CityCoordinate getCityOfOrigin() {
         return cityOfOrigin;
     }
