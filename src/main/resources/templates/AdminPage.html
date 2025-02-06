@@ -2,9 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title></title>
 </head>
 <body>
 
+<div th:each="user : ${Users}">
+    <p th:text="${user.username}"> </p>
+    <button th:attr="onclick='deleteUser(' + ${user.id} + ')'" >Delete User</button>
+</div>
+
 </body>
+
+<script>
+    function deleteUser(userId) {
+        fetch(`api/user/${userId}`, { method: 'DELETE' })
+            .then(response => {
+                if (response.status === 204) {
+                    location.reload();
+                } else {
+                    response.text().then(text => alert(text));
+                }
+            })
+            .catch(error => console.error(error));
+    }
+</script>
+
 </html>

@@ -124,4 +124,5 @@ public class UserRestController {
         return ResponseEntity.status(204).body("User deleted successfully.");
     }
 
+
 }

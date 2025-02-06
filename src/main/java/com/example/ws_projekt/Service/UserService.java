@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -51,6 +52,10 @@ public class UserService implements UserDetailsService {
             user.setRole("ROLE_ADMIN");
             userRepository.save(user);
         }
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
 
