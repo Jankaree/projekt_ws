@@ -14,9 +14,24 @@ public class User {
     private String username;
     private String password;
 
+    private String role;
+
+
+
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "city_id")
     private CityCoordinate cityOfOrigin;
+
+    public String getRole() {
+        return role != null ? role : "ROLE_USER";
+    }
+
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+
 
     public Long getId() {
         return id;

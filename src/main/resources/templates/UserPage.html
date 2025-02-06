@@ -8,7 +8,10 @@
 
 
 <p>Username:<span th:text="${user.username}"></span></p>
-<p>City of Origin: <span th:text="${user.cityOfOrigin.city}"></span></p>
+<p>City: <span th:text="${user.cityOfOrigin.city}"></span></p>
+
+<h3>Weather:</h3>
+
 
 <div th:each="weather : ${weatherAt14}">
     <p th:text="${weather['time']} + ', Temperature: ' + ${weather['temperature']} + '°C'"></p>

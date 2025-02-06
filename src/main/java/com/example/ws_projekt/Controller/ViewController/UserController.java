@@ -57,6 +57,7 @@ public class UserController {
         restTemplate.postForObject(apiUrl, user, String.class);
 
 
+
         return "UserCreationPage";
     }
 
@@ -70,6 +71,7 @@ public class UserController {
         boolean loggedInUser = userService.isLoggedIn();
 
         if (optionalUser.isPresent()) {
+
             User user = optionalUser.get();
             model.addAttribute("user", optionalUser.get());
 
@@ -97,6 +99,12 @@ public class UserController {
         model.addAttribute("isLoggedIn", loggedInUser);
 
         return "UserPage";
+    }
+
+    @GetMapping("/admin")
+    public String adminPage(){
+
+        return "AdminPage";
     }
 
 
