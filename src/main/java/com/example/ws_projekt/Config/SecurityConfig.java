@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/user/create","/api/**","/user/add").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 ).formLogin(form -> form
                         .defaultSuccessUrl("/user/userPage",true)
@@ -43,6 +44,8 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
