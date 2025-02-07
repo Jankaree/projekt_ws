@@ -107,6 +107,12 @@ public class UserController {
         return "UserPage";
     }
 
+    @GetMapping("/perform_logout")
+    public String loggingout() {
+
+        return "perform_logout";
+    }
+
 
 
 
