@@ -3,6 +3,8 @@ package com.example.ws_projekt.Model.UserModel;
 
 import com.example.ws_projekt.Model.CityCoordinate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user-Data")
@@ -10,8 +12,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotBlank
     private String username;
+    @NotBlank
+    @Size(min = 5, max = 10, message = "Size must be 5 to 10 characters long!")
     private String password;
 
     private String role;

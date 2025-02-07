@@ -52,13 +52,19 @@ public class UserController {
 
     @PostMapping("/user/add")
     public String addUser(@ModelAttribute User user, Model model) {
+
         String apiUrl = "http://localhost:8080/api/user";
+        Boolean messageBoolean = true;
 
-        restTemplate.postForObject(apiUrl, user, String.class);
+        if (userRepository.findByUsername(user.getUsername()).isPresent()){
+            model.addAttribute("messageBoolean", messageBoolean);
+            return "UserCreationPage";
+        }else {
 
+            restTemplate.postForObject(apiUrl, user, String.class);
+            return "UserCreationPage";
+        }
 
-
-        return "UserCreationPage";
     }
 
     @GetMapping("/user/userPage")
