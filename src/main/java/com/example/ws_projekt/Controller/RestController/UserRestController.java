@@ -5,6 +5,7 @@ import com.example.ws_projekt.Model.UserModel.User;
 import com.example.ws_projekt.Model.WeatherModel;
 import com.example.ws_projekt.Repository.CityCoordinateRepository;
 import com.example.ws_projekt.Repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody User user) {
+    public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
 
         Optional<CityCoordinate> city = cityCoordinateRepository.findByCity(user.getCityOfOrigin().getCity());
 

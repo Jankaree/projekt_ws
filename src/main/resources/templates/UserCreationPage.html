@@ -10,7 +10,14 @@
 <form action="/user/add" method="post" th:object="${user}">
 
     <label for="username">Username:</label>
+
+
+
     <input type="text" id="username" th:field="*{username}" />
+
+    <p th:if="${messageBoolean != null}">
+        <span th:if="${messageBoolean}">this username already exist</span>
+    </p>
 
     <br/>
 
@@ -29,7 +36,10 @@
     <br/>
 
     <button type="submit">Create User</button>
+
 </form>
+
+
 
 
 
