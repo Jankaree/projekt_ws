@@ -42,7 +42,7 @@ public class UserControllerTest {
     @Test
     void testUserCreation() throws Exception {
         mockMvc.perform(post("/user/add")
-                        .param("username", "testUser")
+                        .param("username", "testuser")
                         .param("password", "testpass")
                         .param("cityOfOrigin", "1"))
                 .andExpect(status().isOk());
