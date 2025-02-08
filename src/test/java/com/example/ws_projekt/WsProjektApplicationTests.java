@@ -1,5 +1,3 @@
-
-
 package com.example.ws_projekt;
 
 import org.junit.jupiter.api.Test;
