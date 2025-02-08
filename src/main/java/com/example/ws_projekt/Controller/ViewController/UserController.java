@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.client.RestTemplate;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.time.LocalTime;
+
 import java.util.*;
 
 @Controller
@@ -68,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/user/userPage")
-    public String userPage(Model model) {
+    public String userPage(Model model, HttpServletResponse response) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -78,8 +80,15 @@ public class UserController {
 
         if (optionalUser.isPresent()) {
 
+
             User user = optionalUser.get();
             model.addAttribute("user", optionalUser.get());
+
+            Cookie cookie = new Cookie("username", user.getUsername());
+            cookie.setMaxAge(7 * 24 * 60 * 60);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+
 
             Map<String, Object> weatherData = restTemplate.getForObject("http://localhost:8080/api/weather/" + user.getId() + "/weekly", Map.class);
             Map<String, Object> hourlyDataMap = (Map<String, Object>) weatherData.get("hourly");
@@ -108,8 +117,13 @@ public class UserController {
     }
 
     @GetMapping("/perform_logout")
-    public String loggingout() {
+    public String loggingout(HttpServletResponse response, HttpSession session) {
 
+        session.invalidate();
+
+        Cookie cookie = new Cookie("username", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
         return "perform_logout";
     }
 
