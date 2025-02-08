@@ -38,7 +38,8 @@ public class UserControllerTest {
                 .andExpect(model().attributeExists("cities"));
     }
 
-
+    //THIS TEST CALLS THE API
+    //MAKE SURE YOUR PROJEKT IS RUNNING WHEN CALLING THIS TEST
     @Test
     void testUserCreation() throws Exception {
         mockMvc.perform(post("/user/add")
